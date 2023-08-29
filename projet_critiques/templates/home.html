@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Bienvenue, {{ request.user.username }}!</h1>
+
+<div class="actions">
+    <a href="{% url 'create_ticket' %}" class="btn btn-primary">Créer un billet</a>
+    <a href="{% url 'create_review' %}" class="btn btn-secondary">Créer une critique</a>
+</div>
+
+<h2>Votre flux</h2>
+
+<h3>Billets</h3>
+{% for ticket in tickets %}
+    <div class="ticket">
+        <strong>{{ ticket.title }}</strong> - <small>Créé par {{ ticket.user.username }}</small>
+        <p>{{ ticket.description }}</p>
+        <small class="date-label">Publié le {{ ticket.created_at|date:"d F Y à H:i" }}</small>
+        {% if ticket.image %}
+        <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" style="width: 200px; height: auto;">
+        {% endif %}
+
+        <!-- Affichage des critiques associées au ticket -->
+        {% for review in ticket.review_set.all %}
+        <div class="associated-review">
+            <strong>{{ review.headline }}</strong> - <small>Créé par {{ review.user.username }}</small>
+            <p>{{ review.body }}</p>
+            <small class="date-label">Publié le {{ review.created_at|date:"d F Y à H:i" }}</small>
+
+            <!-- Affichage des étoiles pour la note -->
+            {% for i in "12345"|make_list %}
+            {% if i|add:0 <= review.rating %}
+            ★ <!-- étoile pleine -->
+            {% else %}
+            ☆ <!-- étoile vide -->
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        {% if not ticket.has_review %}
+        <a href="{% url 'create_review_with_ticket' ticket.id %}" class="btn btn-secondary">Créer une critique pour ce billet</a>
+        {% endif %}
+    </div>
+{% endfor %}
+
+{% endblock %}

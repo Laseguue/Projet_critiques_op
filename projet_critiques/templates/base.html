@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet Critiques</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Projet Critiques</h1>
+        {% if user.is_authenticated %}
+            <nav>
+                <a href="{% url 'home' %}">Flux</a>
+                <a href="{% url 'posts' %}">Posts</a>
+                <a href="{% url 'follows' %}">Abonnements</a>
+                <a href="{% url 'logout' %}">Se déconnecter</a>
+            </nav>
+        {% else %}
+        {% endif %}
+    </header>
+    
+    <main>
+        {% block content %}
+        {# Le contenu spécifique à chaque page sera inséré ici #}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Projet Critiques. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>

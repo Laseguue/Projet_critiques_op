@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Mes Abonnements</h1>
+
+<h2>Utilisateurs que je suis</h2>
+<ul>
+{% for user_follow in followed_users %}
+    <li>{{ user_follow.followed_user.username }}</li>
+{% endfor %}
+</ul>
+
+<h2>Utilisateurs que je suis</h2>
+<ul>
+{% for user_follow in followed_users %}
+    <li>
+        {{ user_follow.followed_user.username }}
+        <a href="{% url 'unfollow_user' user_follow.followed_user.id %}">Arrêter de suivre</a>
+    </li>
+{% endfor %}
+</ul>
+
+<h2>Suivre un nouvel utilisateur</h2>
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="username_to_follow" placeholder="Nom d'utilisateur">
+    <button type="submit">Suivre</button>
+</form>
+
+{% if messages %}
+    <ul class="messages">
+    {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% endblock %}
