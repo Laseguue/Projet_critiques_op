@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Modifier Critique</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div>
+        <label>{{ form.rating.label }}</label>
+        {% for choice in form.rating.field.choices %}
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="{{ form.rating.name }}" id="rating{{ choice.0 }}" value="{{ choice.0 }}" {% if form.rating.value == choice.0 %}checked{% endif %}>
+            <label class="form-check-label" for="rating{{ choice.0 }}">{{ choice.1 }} étoiles</label>
+        </div>
+        {% endfor %}
+    </div>
+    <div>
+        {{ form.headline.label_tag }} {{ form.headline }}
+    </div>
+    <div>
+        {{ form.body.label_tag }} {{ form.body }}
+    </div>
+    <div>
+        {{ form.ticket.as_hidden }}  <!-- Ce champ doit rester caché -->
+    </div>
+    <div>
+        {{ form.image.label_tag }} {{ form.image }}
+    </div>
+
+    <button type="submit">Modifier</button>
+</form>
+{% endblock %}

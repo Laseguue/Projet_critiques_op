@@ -83,7 +83,7 @@ def update_review(request, review_id):
             return redirect('list_reviews')
     else:
         form = ReviewForm(instance=review)
-    return render(request, 'review_form.html', {'form': form})
+    return render(request, 'edit_review_form.html', {'form': form})
 
 @login_required
 def delete_review(request, review_id):
