@@ -25,6 +25,15 @@
         <strong>{{ review.headline }}</strong> - <small>Créé par {{ review.user.username }}</small>
         <p>Note : {{ review.rating }}</p>
         <p>{{ review.body }}</p>
+        
+        <!-- Aperçu du billet associé à la critique -->
+        <div class="associated-ticket">
+            <h4>Billet associé : {{ review.ticket.title }}</h4>
+            {% if review.ticket.image %}
+            <img src="{{ review.ticket.image.url }}" alt="{{ review.ticket.title }}" style="width: 150px; height: auto;">
+            {% endif %}
+        </div>
+        
         <small class="date-label">Publié le {{ review.created_at|date:"d F Y à H:i" }}</small>
         {% if review.image %}
         <img src="{{ review.image.url }}" alt="{{ review.headline }}" style="width: 200px; height: auto;">
