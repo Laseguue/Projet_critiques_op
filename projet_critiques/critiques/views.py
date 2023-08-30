@@ -93,19 +93,6 @@ def delete_review(request, review_id):
         return redirect('posts')
     return render(request, 'review_confirm_delete.html', {'review': review})
 
-@login_required
-def follow_user(request, user_id):
-    user_to_follow = get_object_or_404(User, id=user_id)
-    if user_to_follow != request.user:
-        UserFollows.objects.get_or_create(user=request.user, followed_user=user_to_follow)
-    return redirect('some_view_name')  # Remplacez 'some_view_name' par le nom de la vue vers laquelle rediriger après avoir suivi un utilisateur.
-
-@login_required
-def unfollow_user(request, user_id):
-    user_to_unfollow = get_object_or_404(User, id=user_id)
-    request.user.following.filter(followed_user=user_to_unfollow).delete()
-    return redirect('some_view_name')  # Remplacez 'some_view_name' par le nom de la vue vers laquelle rediriger après avoir arrêté de suivre un utilisateur.
-
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
