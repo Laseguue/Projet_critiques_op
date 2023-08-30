@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Tickets</h2>
-<ul>
+<h2 class="mb-4">Tickets</h2>
+<ul class="list-group">
     {% for ticket in tickets %}
-    <li>
+    <li class="list-group-item">
         <h3>{{ ticket.title }}</h3>
         <p>{{ ticket.description }}</p>
-        <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" width="300">
+        {% if ticket.image %}
+        <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" class="img-fluid mb-3" style="max-width: 300px;">
+        {% endif %}
     </li>
     {% endfor %}
 </ul>

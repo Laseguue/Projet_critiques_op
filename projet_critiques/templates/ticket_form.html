@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>{% if is_update %}Modifier le billet{% else %}Nouveau Ticket{% endif %}</h2>
+<h2 class="mb-4">{% if is_update %}Modifier le billet{% else %}Nouveau Ticket{% endif %}</h2>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">{% if is_update %}Modifier{% else %}Créer{% endif %}</button>
+    <button type="submit" class="btn btn-primary">{% if is_update %}Modifier{% else %}Créer{% endif %}</button>
 </form>
 {% endblock %}

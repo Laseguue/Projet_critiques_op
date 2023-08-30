@@ -4,43 +4,47 @@
 <h1>Mes Abonnements</h1>
 
 <h2>Utilisateurs que je suis</h2>
-<ul>
+<ul class="list-group">
 {% for user_follow in followed_users %}
-    <li>
+    <li class="list-group-item">
         {{ user_follow.followed_user.username }}
-        <a href="{% url 'unfollow_user' user_follow.followed_user.id %}">Arrêter de suivre</a>
+        <a href="{% url 'unfollow_user' user_follow.followed_user.id %}" class="btn btn-sm btn-warning">Arrêter de suivre</a>
     </li>
 {% endfor %}
 </ul>
 
 <h2>Utilisateurs qui me suivent</h2>
-<ul>
+<ul class="list-group">
 {% for user_follow in followers %}
-    <li>{{ user_follow.user.username }}</li>
+    <li class="list-group-item">{{ user_follow.user.username }}</li>
 {% endfor %}
 </ul>
 
 <h2>Suivre un nouvel utilisateur</h2>
+<form method="post" class="form-inline my-2">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="username_input" class="mr-2">Nom de l'utilisateur :</label>
+        <input type="text" id="username_input" name="username_to_follow" class="form-control mr-2" placeholder="Entrez le nom d'utilisateur">
+    </div>
+    <button type="submit" class="btn btn-primary">Suivre</button>
+</form>
 
-<label for="all_users">Liste des utilisateurs :</label>
-<select id="all_users" name="all_users">
+<!-- Menu déroulant pour référence -->
+<h3>Liste de référence des utilisateurs :</h3>
+<select id="all_users" class="form-control">
 {% for user in all_users %}
     <option value="{{ user.username }}">{{ user.username }}</option>
 {% endfor %}
 </select>
-
-<form method="post">
-    {% csrf_token %}
-    <input type="text" name="username_to_follow" placeholder="Nom d'utilisateur">
-    <button type="submit">Suivre</button>
-</form>
+<p class="mt-2">Ce menu est uniquement pour référence. Veuillez saisir le nom de l'utilisateur dans le champ ci-dessus pour le suivre.</p>
 
 {% if messages %}
-    <ul class="messages">
+    <div class="alert-messages mt-3">
     {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">{{ message }}</div>
     {% endfor %}
-    </ul>
+    </div>
 {% endif %}
 
 {% endblock %}

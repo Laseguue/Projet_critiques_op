@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Critiques</h2>
-<ul>
+<h2 class="mb-4">Critiques</h2>
+<ul class="list-group">
     {% for review in reviews %}
-    <li>
+    <li class="list-group-item">
         <h3>{{ review.headline }}</h3>
         <p>{{ review.body }}</p>
         <p>Notation : {{ review.rating }}/5</p>

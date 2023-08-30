@@ -1,48 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Mes Posts</h1>
+<h1 class="mb-4">Mes Posts</h1>
 
-<h2>Billets</h2>
+<h2 class="mt-4">Billets</h2>
 {% for ticket in tickets %}
-    <div class="ticket">
+    <div class="ticket mb-4">
         <strong>{{ ticket.title }}</strong> - <small>Créé par {{ ticket.user.username }}</small>
         <p>{{ ticket.description }}</p>
-        <small class="date-label">Publié le {{ ticket.created_at|date:"d F Y à H:i" }}</small>
+        <small class="date-label d-block mb-2">Publié le {{ ticket.created_at|date:"d F Y à H:i" }}</small>
         {% if ticket.image %}
-        <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" style="width: 200px; height: auto;">
+        <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" class="img-fluid mb-3" style="max-width: 200px;">
         {% endif %}
         <div class="actions">
             <a href="{% url 'update_ticket' ticket.id %}" class="btn btn-secondary">Modifier</a>
-            <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger">Supprimer</a>
+            <a href="{% url 'delete_ticket' ticket.id %}" class="btn btn-danger ml-2">Supprimer</a>
         </div>
     </div>
 {% endfor %}
 
-<h2>Critiques</h2>
+<h2 class="mt-4">Critiques</h2>
 {% for review in reviews %}
-    <div class="review">
+    <div class="review mb-4">
         <strong>{{ review.headline }}</strong> - <small>Créé par {{ review.user.username }}</small>
         <p>Note : {{ review.rating }}</p>
         <p>{{ review.body }}</p>
         
         <!-- Aperçu du billet associé à la critique -->
-        <div class="associated-ticket">
+        <div class="associated-ticket mb-3">
             <h4>Billet associé : {{ review.ticket.title }}</h4>
             {% if review.ticket.image %}
-            <img src="{{ review.ticket.image.url }}" alt="{{ review.ticket.title }}" style="width: 150px; height: auto;">
+            <img src="{{ review.ticket.image.url }}" alt="{{ review.ticket.title }}" class="img-fluid mb-3" style="max-width: 150px;">
             {% endif %}
         </div>
         
-        <small class="date-label">Publié le {{ review.created_at|date:"d F Y à H:i" }}</small>
+        <small class="date-label d-block mb-2">Publié le {{ review.created_at|date:"d F Y à H:i" }}</small>
         {% if review.image %}
-        <img src="{{ review.image.url }}" alt="{{ review.headline }}" style="width: 200px; height: auto;">
+        <img src="{{ review.image.url }}" alt="{{ review.headline }}" class="img-fluid mb-3" style="max-width: 200px;">
         {% endif %}
         <div class="actions">
             <a href="{% url 'update_review' review.id %}" class="btn btn-secondary">Modifier</a>
-            <a href="{% url 'delete_review' review.id %}" class="btn btn-danger">Supprimer</a>
+            <a href="{% url 'delete_review' review.id %}" class="btn btn-danger ml-2">Supprimer</a>
         </div>
     </div>
 {% endfor %}
-
 {% endblock %}

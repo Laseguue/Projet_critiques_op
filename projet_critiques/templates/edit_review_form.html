@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Modifier Critique</h2>
+<h2 class="mb-4">Modifier Critique</h2>
 
-<div class="ticket-details">
+<div class="ticket-details mb-4">
     <h3>Billet associé</h3>
     <strong>{{ ticket.title }}</strong> - <small>Créé par {{ ticket.user.username }}</small>
     <p>{{ ticket.description }}</p>
     {% if ticket.image %}
-    <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" style="width: 200px; height: auto;">
+    <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" class="img-fluid mb-3" style="max-width: 200px;">
     {% endif %}
 </div>
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
-    <div>
+    <div class="form-group">
         <label>{{ form.rating.label }}</label>
         {% for choice in form.rating.field.choices %}
         <div class="form-check form-check-inline">
@@ -24,19 +24,23 @@
         </div>
         {% endfor %}
     </div>
-    <div>
+
+    <div class="form-group">
         {{ form.headline.label_tag }} {{ form.headline }}
     </div>
-    <div>
+
+    <div class="form-group">
         {{ form.body.label_tag }} {{ form.body }}
     </div>
+
     <div>
         {{ form.ticket.as_hidden }}  <!-- Ce champ doit rester caché -->
     </div>
-    <div>
+
+    <div class="form-group">
         {{ form.image.label_tag }} {{ form.image }}
     </div>
 
-    <button type="submit">Modifier</button>
+    <button type="submit" class="btn btn-primary">Modifier</button>
 </form>
 {% endblock %}
