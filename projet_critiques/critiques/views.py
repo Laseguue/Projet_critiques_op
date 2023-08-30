@@ -18,7 +18,7 @@ def create_ticket(request):
             ticket = form.save(commit=False)
             ticket.user = request.user
             ticket.save()
-            return redirect('list_tickets')
+            return redirect('posts')
     else:
         form = TicketForm()
     return render(request, 'ticket_form.html', {'form': form})
@@ -35,17 +35,17 @@ def update_ticket(request, ticket_id):
         form = TicketForm(request.POST, request.FILES, instance=ticket)
         if form.is_valid():
             form.save()
-            return redirect('list_tickets')
+            return redirect('posts')
     else:
         form = TicketForm(instance=ticket)
-    return render(request, 'ticket_form.html', {'form': form})
+    return render(request, 'ticket_form.html', {'form': form, 'is_update': True})
 
 @login_required
 def delete_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
     if request.method == "POST":
         ticket.delete()
-        return redirect('list_tickets')
+        return redirect('posts')
     return render(request, 'ticket_confirm_delete.html', {'ticket': ticket})
 
 
@@ -64,7 +64,7 @@ def create_review(request):
         review.ticket = ticket
         review.save()
         
-        return redirect('list_reviews')
+        return redirect('posts')
     
     return render(request, 'review_form.html', {'ticket_form': ticket_form, 'review_form': review_form})
 
@@ -80,7 +80,7 @@ def update_review(request, review_id):
         form = ReviewForm(request.POST, instance=review)
         if form.is_valid():
             form.save()
-            return redirect('list_reviews')
+            return redirect('posts')
     else:
         form = ReviewForm(instance=review)
     return render(request, 'edit_review_form.html', {'form': form, 'ticket': review.ticket})
@@ -90,7 +90,7 @@ def delete_review(request, review_id):
     review = get_object_or_404(Review, id=review_id)
     if request.method == "POST":
         review.delete()
-        return redirect('list_reviews')
+        return redirect('posts')
     return render(request, 'review_confirm_delete.html', {'review': review})
 
 @login_required
@@ -165,10 +165,12 @@ def user_follows(request):
 
     followed_users = UserFollows.objects.filter(user=request.user)
     followers = UserFollows.objects.filter(followed_user=request.user)
+    all_users = User.objects.all().exclude(id=request.user.id)
 
     context = {
         'followed_users': followed_users,
-        'followers': followers
+        'followers': followers,
+        'all_users': all_users
     }
     return render(request, 'user_follows.html', context)
 
@@ -193,7 +195,7 @@ def create_review_with_ticket(request, ticket_id):
             review.user = request.user
             review.ticket = ticket
             review.save()
-            return redirect('list_reviews')
+            return redirect('posts')
     else:
         form = ReviewForm(initial={'ticket': ticket})
         form.fields['ticket'].widget = forms.HiddenInput()

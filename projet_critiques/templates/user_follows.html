@@ -6,13 +6,6 @@
 <h2>Utilisateurs que je suis</h2>
 <ul>
 {% for user_follow in followed_users %}
-    <li>{{ user_follow.followed_user.username }}</li>
-{% endfor %}
-</ul>
-
-<h2>Utilisateurs que je suis</h2>
-<ul>
-{% for user_follow in followed_users %}
     <li>
         {{ user_follow.followed_user.username }}
         <a href="{% url 'unfollow_user' user_follow.followed_user.id %}">Arrêter de suivre</a>
@@ -20,7 +13,22 @@
 {% endfor %}
 </ul>
 
+<h2>Utilisateurs qui me suivent</h2>
+<ul>
+{% for user_follow in followers %}
+    <li>{{ user_follow.user.username }}</li>
+{% endfor %}
+</ul>
+
 <h2>Suivre un nouvel utilisateur</h2>
+
+<label for="all_users">Liste des utilisateurs :</label>
+<select id="all_users" name="all_users">
+{% for user in all_users %}
+    <option value="{{ user.username }}">{{ user.username }}</option>
+{% endfor %}
+</select>
+
 <form method="post">
     {% csrf_token %}
     <input type="text" name="username_to_follow" placeholder="Nom d'utilisateur">
