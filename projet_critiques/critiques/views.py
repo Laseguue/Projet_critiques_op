@@ -105,6 +105,7 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
 
+@login_required
 def home(request):
     # Obtenir les utilisateurs suivis par l'utilisateur connecté
     followed_users = UserFollows.objects.filter(user=request.user).values_list('followed_user', flat=True)
