@@ -41,7 +41,13 @@ def update_ticket(request, ticket_id):
     else:
         form = TicketForm(instance=ticket)
     return render(
-        request, 'ticket_form.html', {'form': form, 'is_update': True}
+        request,
+        'ticket_form.html',
+        {
+            'form': form,
+            'is_update': True,
+            'ticket': ticket
+        }
     )
 
 

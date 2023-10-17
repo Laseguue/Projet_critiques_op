@@ -2,6 +2,11 @@
 
 {% block content %}
 <h2 class="mb-4">{% if is_update %}Modifier le billet{% else %}Nouveau Ticket{% endif %}</h2>
+
+{% if is_update and ticket.image %}
+    <img src="{{ ticket.image.url }}" alt="Image actuelle pour le ticket" class="mb-4">
+{% endif %}
+
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
