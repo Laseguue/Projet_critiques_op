@@ -23,10 +23,12 @@ def create_ticket(request):
         form = TicketForm()
     return render(request, 'ticket_form.html', {'form': form})
 
+
 @login_required
 def list_tickets(request):
     tickets = Ticket.objects.all()
     return render(request, 'ticket_list.html', {'tickets': tickets})
+
 
 @login_required
 def update_ticket(request, ticket_id):
@@ -38,7 +40,10 @@ def update_ticket(request, ticket_id):
             return redirect('posts')
     else:
         form = TicketForm(instance=ticket)
-    return render(request, 'ticket_form.html', {'form': form, 'is_update': True})
+    return render(
+        request, 'ticket_form.html', {'form': form, 'is_update': True}
+    )
+
 
 @login_required
 def delete_ticket(request, ticket_id):
@@ -53,25 +58,26 @@ def delete_ticket(request, ticket_id):
 def create_review(request):
     ticket_form = TicketForm(request.POST or None, request.FILES or None)
     review_form = ReviewForm(request.POST or None, request.FILES or None)
-
     if ticket_form.is_valid() and review_form.is_valid():
         ticket = ticket_form.save(commit=False)
         ticket.user = request.user
         ticket.save()
-        
         review = review_form.save(commit=False)
         review.user = request.user
         review.ticket = ticket
         review.save()
-        
         return redirect('posts')
-    
-    return render(request, 'review_form.html', {'ticket_form': ticket_form, 'review_form': review_form})
+    return render(
+        request, 'review_form.html',
+        {'ticket_form': ticket_form, 'review_form': review_form}
+    )
+
 
 @login_required
 def list_reviews(request):
     reviews = Review.objects.all()
     return render(request, 'review_list.html', {'reviews': reviews})
+
 
 @login_required
 def update_review(request, review_id):
@@ -83,7 +89,11 @@ def update_review(request, review_id):
             return redirect('posts')
     else:
         form = ReviewForm(instance=review)
-    return render(request, 'edit_review_form.html', {'form': form, 'ticket': review.ticket})
+    return render(
+        request, 'edit_review_form.html',
+        {'form': form, 'ticket': review.ticket}
+    )
+
 
 @login_required
 def delete_review(request, review_id):
@@ -93,31 +103,33 @@ def delete_review(request, review_id):
         return redirect('posts')
     return render(request, 'review_confirm_delete.html', {'review': review})
 
+
 def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Connecter l'utilisateur après l'inscription
             login(request, user)
-            return redirect('login')  # Redirigez vers la vue de votre choix après l'inscription
+            return redirect('login')
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
 
+
 @login_required
 def home(request):
-    # Obtenir les utilisateurs suivis par l'utilisateur connecté
-    followed_users = UserFollows.objects.filter(user=request.user).values_list('followed_user', flat=True)
-
-    # Obtenir les billets des utilisateurs suivis et de l'utilisateur connecté
-    tickets = (Ticket.objects.filter(user__in=followed_users) | Ticket.objects.filter(user=request.user)).prefetch_related('review_set')
-    
-    # Récupérer les IDs des billets pour pouvoir les exclure des critiques générales
+    followed_users = UserFollows.objects.filter(
+        user=request.user
+    ).values_list('followed_user', flat=True)
+    tickets = (
+        Ticket.objects.filter(user__in=followed_users) |
+        Ticket.objects.filter(user=request.user)
+    ).prefetch_related('review_set')
     ticket_ids = tickets.values_list('id', flat=True)
-
-    # Obtenir les critiques des utilisateurs suivis et de l'utilisateur connecté qui ne sont pas déjà associées aux billets
-    reviews = (Review.objects.filter(user__in=followed_users) | Review.objects.filter(user=request.user)).exclude(ticket__in=ticket_ids)
+    reviews = (
+        Review.objects.filter(user__in=followed_users) |
+        Review.objects.filter(user=request.user)
+    ).exclude(ticket__in=ticket_ids)
 
     context = {
         'tickets': tickets,
@@ -125,6 +137,7 @@ def home(request):
     }
 
     return render(request, 'home.html', context)
+
 
 def user_posts(request):
     tickets = Ticket.objects.filter(user=request.user)
@@ -135,19 +148,28 @@ def user_posts(request):
     }
     return render(request, 'user_posts.html', context)
 
+
 def user_follows(request):
     if request.method == "POST":
         username_to_follow = request.POST.get("username_to_follow")
         try:
             user_to_follow = User.objects.get(username=username_to_follow)
-            if user_to_follow != request.user:  # L'utilisateur ne peut pas se suivre lui-même
-                follow, created = UserFollows.objects.get_or_create(user=request.user, followed_user=user_to_follow)
+            if user_to_follow != request.user:
+                follow, created = UserFollows.objects.get_or_create(
+                    user=request.user,
+                    followed_user=user_to_follow
+                )
                 if created:
-                    messages.success(request, f"Vous suivez maintenant {user_to_follow.username}!")
+                    msg = f"Vous suivez maintenant {user_to_follow.username}!"
+                    messages.success(request, msg)
                 else:
-                    messages.warning(request, f"Vous suivez déjà {user_to_follow.username}.")
+                    msg = f"Vous suivez déjà {user_to_follow.username}."
+                    messages.warning(request, msg)
             else:
-                messages.warning(request, "Vous ne pouvez pas vous suivre vous-même.")
+                messages.warning(
+                    request,
+                    "Vous ne pouvez pas vous suivre vous-même."
+                )
         except User.DoesNotExist:
             messages.error(request, "Cet utilisateur n'existe pas.")
 
@@ -162,20 +184,25 @@ def user_follows(request):
     }
     return render(request, 'user_follows.html', context)
 
+
 def unfollow_user(request, user_id):
     try:
         user_to_unfollow = User.objects.get(id=user_id)
-        UserFollows.objects.filter(user=request.user, followed_user=user_to_unfollow).delete()
-        messages.success(request, f"Vous avez arrêté de suivre {user_to_unfollow.username}!")
+        UserFollows.objects.filter(
+            user=request.user, followed_user=user_to_unfollow
+        ).delete()
+        messages.success(
+            request, f"Vous avez arrêté de suivre {user_to_unfollow.username}!"
+        )
     except User.DoesNotExist:
         messages.error(request, "Cet utilisateur n'existe pas.")
 
     return redirect(reverse('follows'))
 
+
 @login_required
 def create_review_with_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
-    
     if request.method == "POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -188,4 +215,6 @@ def create_review_with_ticket(request, ticket_id):
         form = ReviewForm(initial={'ticket': ticket})
         form.fields['ticket'].widget = forms.HiddenInput()
 
-    return render(request, 'review_form.html', {'review_form': form, 'ticket': ticket})
+    return render(
+        request, 'review_form.html', {'review_form': form, 'ticket': ticket}
+    )

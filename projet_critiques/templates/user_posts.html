@@ -26,7 +26,6 @@
         <p>Note : {{ review.rating }}</p>
         <p>{{ review.body }}</p>
         
-        <!-- Aperçu du billet associé à la critique -->
         <div class="associated-ticket mb-3">
             <h4>Billet associé : {{ review.ticket.title }}</h4>
             {% if review.ticket.image %}

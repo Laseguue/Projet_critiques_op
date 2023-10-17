@@ -20,19 +20,17 @@
         <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" class="img-fluid mb-3" style="max-width: 200px;">
         {% endif %}
 
-        <!-- Affichage des critiques associées au ticket -->
         {% for review in ticket.review_set.all %}
         <div class="associated-review mb-3">
             <strong>{{ review.headline }}</strong> - <small>Créé par {{ review.user.username }}</small>
             <p>{{ review.body }}</p>
             <small class="date-label d-block mb-2">Publié le {{ review.created_at|date:"d F Y à H:i" }}</small>
 
-            <!-- Affichage des étoiles pour la note -->
             {% for i in "12345"|make_list %}
             {% if i|add:0 <= review.rating %}
-            ★ <!-- étoile pleine -->
+            ★
             {% else %}
-            ☆ <!-- étoile vide -->
+            ☆
             {% endif %}
             {% endfor %}
         </div>
