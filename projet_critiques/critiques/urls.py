@@ -38,4 +38,5 @@ urlpatterns = [
         views.create_review_with_ticket,
         name='create_review_with_ticket'
     ),
+    path('critiques/review/new/', views.create_ticket_and_review, name='create_ticket_and_review'),
 ]

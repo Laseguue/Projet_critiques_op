@@ -34,6 +34,9 @@
             {% endif %}
             {% endfor %}
         </div>
+            {% if review.images %}
+            <img src="{{ review.images.url }}" alt="{{ review.headline }}" class="img-fluid mb-3" style="max-width: 200px;">
+            {% endif %}
         {% endfor %}
 
         {% if not ticket.has_review %}

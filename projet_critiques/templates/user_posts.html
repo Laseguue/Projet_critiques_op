@@ -25,7 +25,9 @@
         <strong>{{ review.headline }}</strong> - <small>Créé par {{ review.user.username }}</small>
         <p>Note : {{ review.rating }}</p>
         <p>{{ review.body }}</p>
-        
+        {% if review.images %}
+        <img src="{{ review.images.url }}" alt="{{ review.headline }}" class="img-fluid mb-3" style="max-width: 200px;">
+        {% endif %}
         <div class="associated-ticket mb-3">
             <h4>Billet associé : {{ review.ticket.title }}</h4>
             {% if review.ticket.image %}
@@ -34,9 +36,6 @@
         </div>
         
         <small class="date-label d-block mb-2">Publié le {{ review.created_at|date:"d F Y à H:i" }}</small>
-        {% if review.image %}
-        <img src="{{ review.image.url }}" alt="{{ review.headline }}" class="img-fluid mb-3" style="max-width: 200px;">
-        {% endif %}
         <div class="actions">
             <a href="{% url 'update_review' review.id %}" class="btn btn-secondary">Modifier</a>
             <a href="{% url 'delete_review' review.id %}" class="btn btn-danger ml-2">Supprimer</a>

@@ -43,4 +43,4 @@ class Review(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     body = models.TextField(max_length=8192, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(null=True, blank=True)
+    images = models.ImageField(null=True, blank=True)

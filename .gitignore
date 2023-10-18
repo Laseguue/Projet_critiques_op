@@ -1,2 +1,4 @@
 env/
 veille.pdf
+.flake8
+rapport_flake8

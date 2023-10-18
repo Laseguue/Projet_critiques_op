@@ -21,7 +21,7 @@ class ReviewForm(forms.ModelForm):
 
     class Meta:
         model = Review
-        fields = ['rating', 'headline', 'body', 'ticket', 'image']
+        fields = ['rating', 'headline', 'body', 'images']
 
 
 class SignUpForm(UserCreationForm):

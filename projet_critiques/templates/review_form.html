@@ -3,6 +3,22 @@
 {% block content %}
 <h2 class="mb-4">Nouvelle Critique</h2>
 
+<!-- Afficher les erreurs du formulaire Ticket ici -->
+{% if ticket_form.errors %}
+<div class="alert alert-danger">
+    <strong>Erreurs dans le formulaire Ticket:</strong>
+    {{ ticket_form.errors }}
+</div>
+{% endif %}
+
+<!-- Afficher les erreurs du formulaire Review ici -->
+{% if review_form.errors %}
+<div class="alert alert-danger">
+    <strong>Erreurs dans le formulaire Review:</strong>
+    {{ review_form.errors }}
+</div>
+{% endif %}
+
 {% if ticket %}
 <div class="ticket-details mb-4">
     <h3>Détails du billet</h3>
@@ -46,7 +62,7 @@
     </div>
 
     <div class="form-group">
-        {{ review_form.image.label_tag }} {{ review_form.image }}
+        {{ review_form.image.label_tag }} {{ review_form.images }}
     </div>
 
     <button type="submit" class="btn btn-primary">Créer</button>

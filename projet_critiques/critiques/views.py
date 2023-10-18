@@ -210,7 +210,7 @@ def unfollow_user(request, user_id):
 def create_review_with_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
     if request.method == "POST":
-        form = ReviewForm(request.POST)
+        form = ReviewForm(request.POST, request.FILES)
         if form.is_valid():
             review = form.save(commit=False)
             review.user = request.user
@@ -218,9 +218,40 @@ def create_review_with_ticket(request, ticket_id):
             review.save()
             return redirect('posts')
     else:
-        form = ReviewForm(initial={'ticket': ticket})
-        form.fields['ticket'].widget = forms.HiddenInput()
+        form = ReviewForm()
 
     return render(
         request, 'review_form.html', {'review_form': form, 'ticket': ticket}
+    )
+
+
+@login_required
+def create_ticket_and_review(request):
+    if request.method == "POST":
+        ticket_form = TicketForm(request.POST, request.FILES)
+        review_form = ReviewForm(request.POST, request.FILES)
+
+        if ticket_form.is_valid():
+            ticket = ticket_form.save(commit=False)
+            ticket.user = request.user
+            ticket.save()
+
+            if review_form.is_valid():
+                review = review_form.save(commit=False)
+                review.user = request.user
+                review.ticket = ticket
+                review.save()
+                return redirect('posts')
+            else:
+                print("Erreur dans le formulaire de critique:", review_form.errors)
+        else:
+            print("Erreur dans le formulaire de ticket:", ticket_form.errors)
+    else:
+        ticket_form = TicketForm()
+        review_form = ReviewForm()
+
+    return render(
+        request,
+        'review_form.html',
+        {'ticket_form': ticket_form, 'review_form': review_form}
     )
