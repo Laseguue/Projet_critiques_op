@@ -26,10 +26,11 @@ Projet Critiques OP est une application web Django qui permet aux utilisateurs d
 ## Installation
 1. Clonez le dépôt GitHub.
 2. Naviguez vers le dossier du projet.
-3. Installez les dépendances avec `pip install -r requirements.txt` (si un fichier requirements.txt est présent).
-4. Exécutez les migrations avec `python manage.py migrate`.
-5. Démarrez le serveur de développement avec `python manage.py runserver`.
-6. Ouvrez un navigateur web et accédez à `http://127.0.0.1:8000/login`.
+3. Créer votre environement.
+4. Installez les dépendances avec `pip install -r requirements.txt` (si un fichier requirements.txt est présent).
+5. Exécutez les migrations avec `python manage.py migrate`.
+6. Démarrez le serveur de développement avec `python manage.py runserver`.
+7. Ouvrez un navigateur web et accédez à `http://127.0.0.1:8000/login`.
 
 ## Auteur
 [Laseguue](https://github.com/Laseguue)
